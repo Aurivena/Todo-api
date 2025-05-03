@@ -1,0 +1,15 @@
+{
+  "server": {
+    "server_port": "1941",
+    "server_mode": "release",
+    "server_domain": "http://localhost:3000"
+  },
+  "business-database": {
+    "db_password": "1234",
+    "db_host": "localhost",
+    "db_port": "5433",
+    "db_username": "todo_api",
+    "db_name": "todo_db",
+    "db_ssl_mode": "disable"
+  }
+}

@@ -1,0 +1,169 @@
+basePath: /api/
+definitions:
+  models.DoneChange:
+    properties:
+      done:
+        type: boolean
+    type: object
+  models.TodoInput:
+    properties:
+      description:
+        type: string
+      priority:
+        type: string
+      title:
+        type: string
+    type: object
+host: localhost:1941
+info:
+  contact: {}
+  description: Задачки
+  title: TodoService
+  version: 1.0.0
+paths:
+  /todo:
+    get:
+      description: Получение всех задач для текущей сессии
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Список задач получен
+          schema:
+            type: string
+        "401":
+          description: Не авторизирован
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Получить список задач
+      tags:
+      - Задачи
+  /todo/:id:
+    delete:
+      description: Удаляет задачу по ID
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      responses:
+        "204":
+          description: NoContent
+          schema:
+            type: string
+        "400":
+          description: Некорректные данные
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Удалить задачу
+      tags:
+      - Задачи
+    put:
+      consumes:
+      - application/json
+      description: Полное обновление задачи по ID
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Новые данные задачи
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.TodoInput'
+      responses:
+        "204":
+          description: NoContent
+          schema:
+            type: string
+        "400":
+          description: Некорректные данные
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Обновить задачу
+      tags:
+      - Задачи
+  /todo/:id/done:
+    put:
+      consumes:
+      - application/json
+      description: Изменение состояния "выполнено" задачи по ID
+      parameters:
+      - description: ID задачи
+        in: path
+        name: id
+        required: true
+        type: integer
+      - description: Состояние выполнения
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.DoneChange'
+      responses:
+        "204":
+          description: NoContent
+          schema:
+            type: string
+        "400":
+          description: Некорректные данные
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Отметить задачу выполненной
+      tags:
+      - Задачи
+  /todo/create:
+    post:
+      consumes:
+      - application/json
+      description: Создание новой задачи для текущей сессии
+      parameters:
+      - description: Данные задачи
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/models.TodoInput'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Задача создана
+          schema:
+            type: string
+        "400":
+          description: Некорректные данные
+          schema:
+            type: string
+        "401":
+          description: Не авторизирован
+          schema:
+            type: string
+        "500":
+          description: Внутренняя ошибка сервера
+          schema:
+            type: string
+      summary: Создать задачу
+      tags:
+      - Задачи
+swagger: "2.0"
