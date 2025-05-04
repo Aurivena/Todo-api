@@ -13,7 +13,7 @@ import (
 // @Accept       json
 // @Produce      json
 // @Param        input body models.TodoInput true "Данные задачи"
-// @Success      200 {object} string "Задача создана"
+// @Success      200 {object} models.TodoInput "Задача создана"
 // @Failure      401 {object} string "Не авторизирован"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
@@ -41,7 +41,7 @@ func (r *Route) Create(c *gin.Context) {
 // @Description  Получение всех задач для текущей сессии
 // @Tags         Задачи
 // @Produce      json
-// @Success      200 {object} string "Список задач получен"
+// @Success      200 {object} []models.TodoOutput "Список задач получен"
 // @Failure      401 {object} string "Не авторизирован"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
 // @Router       /todo [get]
