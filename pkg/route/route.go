@@ -34,11 +34,11 @@ func (r *Route) InitHTTPRoutes(config *models.ServerConfig) *gin.Engine {
 
 	api := router.Group("/api")
 	{
-		api.POST("todo/create", r.Create)
-		api.GET("todo", r.Get)
-		api.DELETE("todo/:id", r.Delete)
-		api.PUT("todo/:id", r.Update)
-		api.PUT("todo/:id/done", r.UpdateDone)
+		api.POST("/todo", r.Create)
+		api.GET("/todo", r.Get)
+		api.DELETE("/todo/:id", r.Delete)
+		api.PUT("/todo/:id", r.Update)
+		api.PUT("/todo/:id/done", r.UpdateDone)
 	}
 
 	return router

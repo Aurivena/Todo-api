@@ -17,7 +17,7 @@ import (
 // @Failure      401 {object} string "Не авторизирован"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
-// @Router       /todo/create [post]
+// @Router       /todo [post]
 func (r *Route) Create(c *gin.Context) {
 	var input models.TodoInput
 	if err := c.ShouldBindJSON(&input); err != nil {
