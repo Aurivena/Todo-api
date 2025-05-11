@@ -15,9 +15,9 @@ func NewTodoPersistence(db *sqlx.DB) *TodoPersistence {
 
 func (p *TodoPersistence) Create(input *models.TodoInput, session string) (*models.TodoOutput, error) {
 	var out models.TodoOutput
-	err := p.db.Get(&out, `INSERT INTO "Todo" (session, title, description, priority) 
-		VALUES ($1, $2, $3, $4) RETURNING id, title, description, priority, date, done`,
-		session, input.Title, input.Description, input.Priority)
+	err := p.db.Get(&out, `INSERT INTO "Todo" (session, title, description, priority,date_completed) 
+		VALUES ($1, $2, $3, $4,$5) RETURNING id, title, description, priority, date_created,date_completed, done`,
+		session, input.Title, input.Description, input.Priority, input.DateCompleted)
 	if err != nil {
 		return nil, err
 	}
@@ -28,7 +28,7 @@ func (p *TodoPersistence) Create(input *models.TodoInput, session string) (*mode
 func (p *TodoPersistence) Get(session string) ([]models.TodoOutput, error) {
 	var out []models.TodoOutput
 
-	err := p.db.Select(&out, `SELECT id,title,description,priority,date,done FROM "Todo" WHERE session = $1`, session)
+	err := p.db.Select(&out, `SELECT id,title,description,priority,date_created, date_completed,done FROM "Todo" WHERE session = $1`, session)
 	if err != nil {
 		return nil, err
 	}
@@ -45,7 +45,7 @@ func (p *TodoPersistence) Delete(id int) error {
 }
 
 func (p *TodoPersistence) Update(input *models.TodoInput, id int) error {
-	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3 WHERE id=$4`, input.Title, input.Description, input.Priority, id)
+	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3, date_completed = $4 WHERE id=$5`, input.Title, input.Description, input.Priority, input.DateCompleted, id)
 	if err != nil {
 		return err
 	}

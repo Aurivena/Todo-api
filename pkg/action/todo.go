@@ -2,12 +2,20 @@ package action
 
 import (
 	"Todo/models"
+	"errors"
 	"github.com/Aurivena/answer"
+)
+
+var (
+	errorPriorityIsInvalid = errors.New("priority is invalid")
 )
 
 func (a *Action) Create(input *models.TodoInput, session string) (*models.TodoOutput, answer.ErrorCode) {
 	out, err := a.domains.Create(input, session)
 	if err != nil {
+		if errors.As(err, &errorPriorityIsInvalid) {
+			return nil, answer.BadRequest
+		}
 		return nil, answer.InternalServerError
 	}
 	return out, answer.OK
