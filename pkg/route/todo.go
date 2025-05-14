@@ -12,7 +12,7 @@ import (
 // @Tags         Задачи
 // @Accept       json
 // @Produce      json
-// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
+// @Param        X-Session-ID cookie string true "Идентификатор сессии пользователя"
 // @Param        input body models.TodoInput true "Данные задачи"
 // @Success      200 {object} models.TodoOutput "Задача создана"
 // @Failure      401 {object} string "Не авторизирован"
@@ -42,7 +42,7 @@ func (r *Route) Create(c *gin.Context) {
 // @Description  Получение всех задач для текущей сессии
 // @Tags         Задачи
 // @Produce      json
-// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
+// @Param        X-Session-ID cookie string true "Идентификатор сессии пользователя"
 // @Success      200 {object} []models.TodoOutput "Список задач получен"
 // @Failure      401 {object} string "Не авторизирован"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
@@ -65,7 +65,7 @@ func (r *Route) Get(c *gin.Context) {
 // @Description  Удаляет задачу по ID
 // @Tags         Задачи
 // @Param        id path int true "ID задачи"
-// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
+// @Param        X-Session-ID cookie string true "Идентификатор сессии пользователя"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
@@ -94,7 +94,7 @@ func (r *Route) Delete(c *gin.Context) {
 // @Tags         Задачи
 // @Accept       json
 // @Param        id path int true "ID задачи"
-// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
+// @Param        X-Session-ID cookie string true "Идентификатор сессии пользователя"
 // @Param        input body models.TodoInput true "Новые данные задачи"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
@@ -129,7 +129,7 @@ func (r *Route) Update(c *gin.Context) {
 // @Tags         Задачи
 // @Accept       json
 // @Param        id path int true "ID задачи"
-// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
+// @Param        X-Session-ID cookie string true "Идентификатор сессии пользователя"
 // @Param        input body models.DoneChange true "Состояние выполнения"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
