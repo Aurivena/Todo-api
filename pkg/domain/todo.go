@@ -13,16 +13,16 @@ func (t *TodoDomain) Create(input *models.TodoInput, session string) (*models.To
 	return t.pers.Create(input, session)
 }
 
-func (t *TodoDomain) Delete(id int) error {
-	return t.pers.Delete(id)
+func (t *TodoDomain) Delete(id int, session string) error {
+	return t.pers.Delete(id, session)
 }
 
-func (t *TodoDomain) Update(input *models.TodoInput, id int) error {
-	return t.pers.Update(input, id)
+func (t *TodoDomain) Update(input *models.TodoInput, id int, session string) error {
+	return t.pers.Update(input, id, session)
 }
 
-func (t *TodoDomain) UpdateDone(input *models.DoneChange, id int) error {
-	return t.pers.UpdateDone(input, id)
+func (t *TodoDomain) UpdateDone(input *models.DoneChange, id int, session string) error {
+	return t.pers.UpdateDone(input, id, session)
 }
 
 func (t *TodoDomain) Get(session string) ([]models.TodoOutput, error) {

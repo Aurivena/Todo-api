@@ -36,16 +36,16 @@ func (p *TodoPersistence) Get(session string) ([]models.TodoOutput, error) {
 	return out, err
 }
 
-func (p *TodoPersistence) Delete(id int) error {
-	_, err := p.db.Exec(`DELETE FROM "Todo" WHERE id = $1`, id)
+func (p *TodoPersistence) Delete(id int, session string) error {
+	_, err := p.db.Exec(`DELETE FROM "Todo" WHERE id = $1 AND session = $2`, id, session)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (p *TodoPersistence) Update(input *models.TodoInput, id int) error {
-	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3, date_completed = $4 WHERE id=$5`, input.Title, input.Description, input.Priority, input.DateCompleted, id)
+func (p *TodoPersistence) Update(input *models.TodoInput, id int, session string) error {
+	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3, date_completed = $4 WHERE id=$5 AND session = $6`, input.Title, input.Description, input.Priority, input.DateCompleted, id, session)
 	if err != nil {
 		return err
 	}
@@ -53,8 +53,8 @@ func (p *TodoPersistence) Update(input *models.TodoInput, id int) error {
 	return nil
 }
 
-func (p *TodoPersistence) UpdateDone(input *models.DoneChange, id int) error {
-	_, err := p.db.Exec(`UPDATE "Todo" SET done = $1 WHERE id = $2`, input.Done, id)
+func (p *TodoPersistence) UpdateDone(input *models.DoneChange, id int, session string) error {
+	_, err := p.db.Exec(`UPDATE "Todo" SET done = $1 WHERE id = $2 AND session = $3`, input.Done, id, session)
 	if err != nil {
 		return err
 	}

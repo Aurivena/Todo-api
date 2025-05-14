@@ -12,6 +12,7 @@ import (
 // @Tags         Задачи
 // @Accept       json
 // @Produce      json
+// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
 // @Param        input body models.TodoInput true "Данные задачи"
 // @Success      200 {object} models.TodoOutput "Задача создана"
 // @Failure      401 {object} string "Не авторизирован"
@@ -24,7 +25,7 @@ func (r *Route) Create(c *gin.Context) {
 		answer.SendError(c, "Неверный формат входных данных", answer.BadRequest)
 		return
 	}
-	session, err := c.Cookie("session")
+	session, err := c.Cookie("X-Session-ID")
 	if err != nil {
 		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
 		return
@@ -41,12 +42,13 @@ func (r *Route) Create(c *gin.Context) {
 // @Description  Получение всех задач для текущей сессии
 // @Tags         Задачи
 // @Produce      json
+// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
 // @Success      200 {object} []models.TodoOutput "Список задач получен"
 // @Failure      401 {object} string "Не авторизирован"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
 // @Router       /todo [get]
 func (r *Route) Get(c *gin.Context) {
-	session, err := c.Cookie("session")
+	session, err := c.Cookie("X-Session-ID")
 	if err != nil {
 		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
 		return
@@ -63,17 +65,23 @@ func (r *Route) Get(c *gin.Context) {
 // @Description  Удаляет задачу по ID
 // @Tags         Задачи
 // @Param        id path int true "ID задачи"
+// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
 // @Router       /todo/:id [delete]
 func (r *Route) Delete(c *gin.Context) {
+	session, err := c.Cookie("X-Session-ID")
+	if err != nil {
+		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
+		return
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		answer.SendError(c, "Неверный ID", answer.BadRequest)
 		return
 	}
-	code := r.action.Delete(id)
+	code := r.action.Delete(id, session)
 	if code != answer.OK {
 		answer.SendError(c, "Ошибка при удалении задачи", code)
 		return
@@ -86,12 +94,18 @@ func (r *Route) Delete(c *gin.Context) {
 // @Tags         Задачи
 // @Accept       json
 // @Param        id path int true "ID задачи"
+// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
 // @Param        input body models.TodoInput true "Новые данные задачи"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
 // @Router       /todo/:id [put]
 func (r *Route) Update(c *gin.Context) {
+	session, err := c.Cookie("X-Session-ID")
+	if err != nil {
+		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
+		return
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		answer.SendError(c, "Неверный ID", answer.BadRequest)
@@ -102,7 +116,7 @@ func (r *Route) Update(c *gin.Context) {
 		answer.SendError(c, "Неверный формат входных данных", answer.BadRequest)
 		return
 	}
-	code := r.action.Update(&input, id)
+	code := r.action.Update(&input, id, session)
 	if code != answer.OK {
 		answer.SendError(c, "Ошибка при обновлении задачи", code)
 		return
@@ -115,12 +129,18 @@ func (r *Route) Update(c *gin.Context) {
 // @Tags         Задачи
 // @Accept       json
 // @Param        id path int true "ID задачи"
+// @Param        X-Session-ID header string true "Идентификатор сессии пользователя"
 // @Param        input body models.DoneChange true "Состояние выполнения"
 // @Success      204 {object} string "NoContent"
 // @Failure      400 {object} string "Некорректные данные"
 // @Failure      500 {object} string "Внутренняя ошибка сервера"
 // @Router       /todo/:id/done [put]
 func (r *Route) UpdateDone(c *gin.Context) {
+	session, err := c.Cookie("X-Session-ID")
+	if err != nil {
+		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
+		return
+	}
 	id, err := strconv.Atoi(c.Param("id"))
 	if err != nil {
 		answer.SendError(c, "Неверный ID", answer.BadRequest)
@@ -131,7 +151,7 @@ func (r *Route) UpdateDone(c *gin.Context) {
 		answer.SendError(c, "Неверный формат входных данных", answer.BadRequest)
 		return
 	}
-	code := r.action.UpdateDone(&input, id)
+	code := r.action.UpdateDone(&input, id, session)
 	if code != answer.NoContent {
 		answer.SendError(c, "Ошибка при изменении состояния задачи", code)
 		return

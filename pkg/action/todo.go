@@ -29,22 +29,25 @@ func (a *Action) Get(session string) ([]models.TodoOutput, answer.ErrorCode) {
 	return out, answer.OK
 }
 
-func (a *Action) Delete(id int) answer.ErrorCode {
-	if err := a.domains.Delete(id); err != nil {
+func (a *Action) Delete(id int, session string) answer.ErrorCode {
+	if err := a.domains.Delete(id, session); err != nil {
 		return answer.InternalServerError
 	}
 	return answer.NoContent
 }
 
-func (a *Action) Update(input *models.TodoInput, id int) answer.ErrorCode {
-	if err := a.domains.Update(input, id); err != nil {
+func (a *Action) Update(input *models.TodoInput, id int, session string) answer.ErrorCode {
+	if err := a.domains.Update(input, id, session); err != nil {
+		if errors.As(err, &errorPriorityIsInvalid) {
+			return answer.BadRequest
+		}
 		return answer.InternalServerError
 	}
 	return answer.NoContent
 }
 
-func (a *Action) UpdateDone(input *models.DoneChange, id int) answer.ErrorCode {
-	if err := a.domains.UpdateDone(input, id); err != nil {
+func (a *Action) UpdateDone(input *models.DoneChange, id int, session string) answer.ErrorCode {
+	if err := a.domains.UpdateDone(input, id, session); err != nil {
 		return answer.InternalServerError
 	}
 	return answer.NoContent
