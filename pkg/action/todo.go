@@ -26,6 +26,9 @@ func (a *Action) Get(session string) ([]models.TodoOutput, answer.ErrorCode) {
 	if err != nil {
 		return nil, answer.InternalServerError
 	}
+	if out == nil {
+		return []models.TodoOutput{}, answer.OK
+	}
 	return out, answer.OK
 }
 
