@@ -48,10 +48,3 @@ func (a *Action) Update(input *models.TodoInput, id int, session string) answer.
 	}
 	return answer.NoContent
 }
-
-func (a *Action) UpdateDone(input *models.DoneChange, id int, session string) answer.ErrorCode {
-	if err := a.domains.UpdateDone(input, id, session); err != nil {
-		return answer.InternalServerError
-	}
-	return answer.NoContent
-}

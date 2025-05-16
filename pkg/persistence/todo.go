@@ -45,18 +45,10 @@ func (p *TodoPersistence) Delete(id int, session string) error {
 }
 
 func (p *TodoPersistence) Update(input *models.TodoInput, id int, session string) error {
-	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3, date_completed = $4 WHERE id=$5 AND session = $6`, input.Title, input.Description, input.Priority, input.DateCompleted, id, session)
+	_, err := p.db.Exec(`UPDATE "Todo" SET title=$1, description=$2, priority=$3, date_completed = $4, done = $5 WHERE id=$6 AND session = $7`, input.Title, input.Description, input.Priority, input.DateCompleted, input.Done, id, session)
 	if err != nil {
 		return err
 	}
 
-	return nil
-}
-
-func (p *TodoPersistence) UpdateDone(input *models.DoneChange, id int, session string) error {
-	_, err := p.db.Exec(`UPDATE "Todo" SET done = $1 WHERE id = $2 AND session = $3`, input.Done, id, session)
-	if err != nil {
-		return err
-	}
 	return nil
 }

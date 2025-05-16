@@ -2,7 +2,7 @@
   "server": {
     "server_port": "1941",
     "server_mode": "release",
-    "server_domain": "http://localhost:3000"
+    "server_domain": "http://localhost:5173"
   },
   "business-database": {
     "db_password": "1234",

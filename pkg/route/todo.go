@@ -123,38 +123,3 @@ func (r *Route) Update(c *gin.Context) {
 	}
 	answer.SendResponseSuccess(c, answer.NoContent, code)
 }
-
-// @Summary      Отметить задачу выполненной
-// @Description  Изменение состояния "выполнено" задачи по ID
-// @Tags         Задачи
-// @Accept       json
-// @Param        id path int true "ID задачи"
-// @Param        // @Param X-Session-ID header string true "Идентификатор сессии (указывается в cookie, но описан как header для Swagger)" string true "Идентификатор сессии пользователя"
-// @Param        input body models.DoneChange true "Состояние выполнения"
-// @Success      204 {object} string "NoContent"
-// @Failure      400 {object} string "Некорректные данные"
-// @Failure      500 {object} string "Внутренняя ошибка сервера"
-// @Router       /todo/:id/done [put]
-func (r *Route) UpdateDone(c *gin.Context) {
-	session, err := c.Cookie("X-Session-ID")
-	if err != nil {
-		answer.SendError(c, "Сессия отсутствует", answer.Unauthorized)
-		return
-	}
-	id, err := strconv.Atoi(c.Param("id"))
-	if err != nil {
-		answer.SendError(c, "Неверный ID", answer.BadRequest)
-		return
-	}
-	var input models.DoneChange
-	if err = c.ShouldBindJSON(&input); err != nil {
-		answer.SendError(c, "Неверный формат входных данных", answer.BadRequest)
-		return
-	}
-	code := r.action.UpdateDone(&input, id, session)
-	if code != answer.NoContent {
-		answer.SendError(c, "Ошибка при изменении состояния задачи", code)
-		return
-	}
-	answer.SendResponseSuccess(c, answer.NoContent, code)
-}

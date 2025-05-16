@@ -38,7 +38,6 @@ func (r *Route) InitHTTPRoutes(config *models.ServerConfig) *gin.Engine {
 		api.GET("/todo", r.Get)
 		api.DELETE("/todo/:id", r.Delete)
 		api.PUT("/todo/:id", r.Update)
-		api.PUT("/todo/:id/done", r.UpdateDone)
 	}
 
 	return router

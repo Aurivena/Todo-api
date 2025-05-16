@@ -21,10 +21,6 @@ func (t *TodoDomain) Update(input *models.TodoInput, id int, session string) err
 	return t.pers.Update(input, id, session)
 }
 
-func (t *TodoDomain) UpdateDone(input *models.DoneChange, id int, session string) error {
-	return t.pers.UpdateDone(input, id, session)
-}
-
 func (t *TodoDomain) Get(session string) ([]models.TodoOutput, error) {
 	return t.pers.Get(session)
 }
