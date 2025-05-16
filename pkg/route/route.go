@@ -28,7 +28,7 @@ func (r *Route) InitHTTPRoutes(config *models.ServerConfig) *gin.Engine {
 		AllowOrigins:     allowOrigins,
 		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE"},
 		AllowHeaders:     []string{"X-Session-ID", "Content-Type", "Authorization"},
-		AllowCredentials: false,
+		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
 
